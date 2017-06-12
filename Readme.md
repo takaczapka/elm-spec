@@ -174,6 +174,7 @@ The following steps are available in the `steps` record:
 , clearValue : String -> Step
 , getUrl : Task Never String
 , click : String -> Step
+, inputViaPort : String -> Json.Value -> Step
 }
 ```
 
@@ -216,6 +217,39 @@ spec =
     , step2
     ]
 ```
+
+## Interaction with Ports
+If your application uses _Ports_ to input data from outside JavaScript
+context, you can simulate these events using `inputViaPort` step, i.e.:
+
+```elm
+  -- having defined ports module
+  ports module Ports exposing (..) 
+  
+  port inputValue : (String -> msg) -> Sub msg
+  
+  -- and subscribing to it's values in the application's and test spec's main  
+  main =
+      runWithProgram -- for test spec's or Html.program for real app
+          { init = init
+          , update = update
+          , view = view
+          , subscriptions = \_ -> Sub.batch [ Ports.inputValue SetValue ] -- raise SetValue msg for each update coming from port
+          , initCmd = Cmd.none
+          }
+          specs
+    
+  -- then your spec can use it in following way
+  it "should set value of element on init"
+    [ assert.containsText { text = "", selector = ".value" }
+    , steps.inputViaPort "inputValue" (JE.string "new-value-from-port")
+    , assert.containsText { text = "new-value-from-port", selector = ".value" }
+    ]
+    
+```
+
+Check `specs/PortSpec.elm` for details.
+
 
 ## Examples
 You can see examples of tests written in elm-spec in here:

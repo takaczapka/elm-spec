@@ -329,6 +329,21 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     }
   }
 
+  var inputViaPort = function (portName, args) {
+    return task(function (callback) {
+      try {
+        if (window.embeddedApp.ports && window.embeddedApp.ports[portName]) {
+          window.embeddedApp.ports[portName].send(args)
+            return callback(succeed(pass('Port: "' + bold(portName) + '" with payload: ' + bold(JSON.stringify(args)))))
+          } else {
+            return callback(succeed(fail('Cannot find port: "' + bold(portName) + '" in the app.')))
+          }
+      } catch (e) {
+        return callback(succeed(error(e.toString())))
+      }
+    });
+  }
+
   var getTitle = task(function (callback) {
     callback(succeed(document.title.toString()))
   })
@@ -446,6 +461,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
       return task(function () { succeed(tuple0) })
     },
     click: click,
+    inputViaPort: F2(inputViaPort),
     raf: raf()
   }
 }())
