@@ -100,6 +100,16 @@ type alias ClassData =
 type alias StyleData =
   { style : String, value : String, selector : String }
 
+{-| Input event data
+-}
+type alias ValueWithEventData =
+  { value : String, selector : String, eventName : String }
+
+
+{-| Input event data
+-}
+type alias EventData =
+  { selector : String, eventName : String }
 
 {-| Gets the message from an outcome.
 -}

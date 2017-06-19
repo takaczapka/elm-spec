@@ -291,11 +291,35 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     })
   }
 
+  var setValueAndDispatch = function (value, selector, eventName) {
+    return taskWithElement(selector, function (element) {
+      element.value = value
+      dispatchEventForElement(element, eventName)
+
+      return pass('Set value to ' + boldString(value) + ' of ' + bold(selector) + '; dispatching event ' + boldString(eventName))
+    })
+  }
+
   var clearValue = function (selector) {
     return taskWithElement(selector, function (element) {
       element.value = ''
       return pass('Cleared value of ' + bold(selector))
     })
+  }
+
+  var clearValueAndDispatch = function (selector, eventName) {
+    return taskWithElement(selector, function (element) {
+      element.value = ''
+      dispatchEventForElement(element, eventName)
+
+        return pass('Cleared value of ' + bold(selector) + '; dispatching event ' + boldString(eventName))
+    })
+  }
+
+  var dispatchEventForElement = function (element, eventType) {
+    var event = new Event('Bubbly Event')
+    event.initEvent(eventType, true, true) // TODO
+    element.dispatchEvent(event)
   }
 
   var dispatchEvent = function (eventType, data, selector) {
@@ -431,7 +455,9 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     titleEquals: titleEquals,
     urlContains: urlContains,
     clearValue: clearValue,
+    clearValueAndDispatch: F2(clearValueAndDispatch),
     setValue: F2(setValue),
+    setValueAndDispatch: F3(setValueAndDispatch),
     setLayout: setLayout,
     urlEquals: urlEquals,
     getTestId: getTestId,

@@ -6,6 +6,10 @@ module Spec.Native exposing (..)
 @docs containsText, attributeContains, attributeEquals, classPresent
 @docs styleEquals, elementPresent, elementVisible, titleContains
 @docs titleEquals, urlContains, urlEquals, valueContains, valueEquals
+@docs clearValueAndDispatch
+
+# Steps
+@docs clearValueAndDispatch
 -}
 import Spec.Types exposing (..)
 import Task exposing (Task)
@@ -109,3 +113,16 @@ valueEquals { text, selector } =
 inlineStyleEquals : StyleData -> Assertion
 inlineStyleEquals { style, value, selector } =
   Native.Spec.inlineStyleEquals style value selector
+
+
+{-| For a given selector, gets element, clears a value and triggers dom event for its element.
+-}
+clearValueAndDispatch : EventData -> Step
+clearValueAndDispatch { selector, eventName } =
+  Native.Spec.clearValueAndDispatch selector eventName
+
+{-| For a given selector, gets element, set it's value and dispatch an event.
+-}
+setValueAndDispatch : ValueWithEventData -> Step
+setValueAndDispatch { value, selector, eventName } =
+  Native.Spec.setValueAndDispatch value selector eventName

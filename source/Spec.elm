@@ -288,18 +288,22 @@ steps :
   { dispatchEvent : String -> Json.Value -> String -> Step
   , getAttribute : String -> String -> Task Never String
   , setValue : String -> String -> Step
+  , setValueAndDispatch : ValueWithEventData -> Step
   , getTitle : Task Never String
   , clearValue : String -> Step
+  , clearValueAndDispatch : EventData -> Step
   , getUrl : Task Never String
   , click : String -> Step
   , inputViaPort : String -> Json.Value -> Step
   }
 steps =
   { dispatchEvent = Native.Spec.dispatchEvent
-  , getAttribute =Native.Spec.getAttribute
+  , getAttribute = Native.Spec.getAttribute
   , clearValue = Native.Spec.clearValue
+  , clearValueAndDispatch = Spec.Native.clearValueAndDispatch
   , getTitle = Native.Spec.getTitle
   , setValue = Native.Spec.setValue
+  , setValueAndDispatch = Spec.Native.setValueAndDispatch
   , getUrl = Native.Spec.getUrl
   , click = Native.Spec.click
   , inputViaPort = Native.Spec.inputViaPort
