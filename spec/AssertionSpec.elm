@@ -1,6 +1,6 @@
 import Spec exposing (..)
 
-import Html.Attributes exposing (attribute, class, style, value)
+import Html.Attributes exposing (attribute, class, style, value, disabled)
 import Html exposing (..)
 
 import Task
@@ -40,6 +40,8 @@ view model =
     , div [ class "hidden-by-z-index", style [ ( "position", "relative"), ("z-index", "-1" ) ] ]
       [ span [] [ i [] [] ] ]
     , input [ value "value of input" ] []
+    , button [ class "disabled-button", disabled True ] [ text "disabled button" ]
+    , button [ class "enabled-button" ] [ text "enabled button" ]
     ]
 
 
@@ -120,6 +122,12 @@ specs =
         [ assert.not.elementVisible "div.hidden-by-z-index" ]
       , it "should check parent elements"
         [ assert.not.elementVisible "div.hidden-by-z-index span i" ]
+      ]
+    , describe ".elementDisabled"
+      [ it "should check if element is disabled"
+        [ assert.elementDisabled ".disabled-button"]
+      , it "should check if element is not disabled"
+        [ assert.not.elementDisabled ".enabled-button"]
       ]
     , describe ".titleContains"
       [ it "should check if title contains text"

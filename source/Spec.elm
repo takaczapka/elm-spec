@@ -225,6 +225,7 @@ assert :
   , containsText : TextData -> Assertion
   , styleEquals : StyleData -> Assertion
   , elementPresent : String -> Assertion
+  , elementDisabled : String -> Assertion
   , elementVisible : String -> Assertion
   , titleContains : String -> Assertion
   , valueEquals : TextData -> Assertion
@@ -240,6 +241,7 @@ assert :
     , containsText : TextData -> Assertion
     , styleEquals : StyleData -> Assertion
     , elementPresent : String -> Assertion
+    , elementDisabled : String -> Assertion
     , elementVisible : String -> Assertion
     , titleContains : String -> Assertion
     , valueEquals : TextData -> Assertion
@@ -253,6 +255,7 @@ assert =
   , inlineStyleEquals = Spec.Native.inlineStyleEquals
   , attributeEquals = Spec.Native.attributeEquals
   , elementPresent = Spec.Native.elementPresent
+  , elementDisabled = Spec.Native.elementDisabled
   , elementVisible = Spec.Native.elementVisible
   , valueContains = Spec.Native.valueContains
   , titleContains = Spec.Native.titleContains
@@ -268,6 +271,7 @@ assert =
     , inlineStyleEquals = Spec.Native.inlineStyleEquals >> flip
     , attributeEquals = Spec.Native.attributeEquals >> flip
     , elementPresent = Spec.Native.elementPresent >> flip
+    , elementDisabled = Spec.Native.elementDisabled >> flip
     , elementVisible = Spec.Native.elementVisible >> flip
     , valueContains = Spec.Native.valueContains >> flip
     , titleContains = Spec.Native.titleContains >> flip

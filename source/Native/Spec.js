@@ -161,6 +161,21 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     })
   }
 
+  var elementDisabled = function (selector) {
+    return task(function (callback) {
+      try {
+        var el = document.querySelector(selector)
+        if (el && el.disabled) {
+          return callback(succeed(pass('Element ' + bold(selector) + ' is disabled')))
+        } else {
+          return callback(succeed(fail('Element ' + bold(selector) + ' is not disabled')))
+        }
+      } catch (e) {
+        return callback(succeed(error(e.toString())))
+      }
+    })
+  };
+
   var elementPresent = function (selector) {
     return task(function (callback) {
       try {
@@ -448,6 +463,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     containsText: F2(containsText),
     getAttribute: F2(getAttribute),
     elementPresent: elementPresent,
+    elementDisabled: elementDisabled,
     elementVisible: elementVisible,
     titleContains: titleContains,
     styleEquals: F3(styleEquals),

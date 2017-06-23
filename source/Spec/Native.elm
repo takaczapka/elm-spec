@@ -58,6 +58,12 @@ elementPresent : String -> Assertion
 elementPresent =
   Native.Spec.elementPresent
 
+{-| Checks if the given element is disabled in the DOM.
+-}
+elementDisabled : String -> Assertion
+elementDisabled =
+  Native.Spec.elementDisabled
+
 
 {-| Checks if the given element is visible on the page.
 -}
