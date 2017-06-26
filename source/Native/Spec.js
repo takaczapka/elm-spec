@@ -202,6 +202,21 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     })
   }
 
+  var checkboxChecked = function (selector) {
+      return task(function (callback) {
+          try {
+              var el = document.querySelector(selector)
+              if (el && el.checked) {
+                  return callback(succeed(pass('Element ' + bold(selector) + ' is checked')))
+              } else {
+                  return callback(succeed(fail('Element ' + bold(selector) + ' is unchecked')))
+              }
+          } catch (e) {
+              return callback(succeed(error(e.toString())))
+          }
+      })
+  };
+
   var testVisibility = function (element, selector) {
     if (!element) { return null }
     var style = window.getComputedStyle(element)
@@ -465,6 +480,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     elementPresent: elementPresent,
     elementDisabled: elementDisabled,
     elementVisible: elementVisible,
+    checkboxChecked: checkboxChecked,
     titleContains: titleContains,
     styleEquals: F3(styleEquals),
     valueEquals: F2(valueEquals),

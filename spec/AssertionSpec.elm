@@ -1,6 +1,6 @@
 import Spec exposing (..)
 
-import Html.Attributes exposing (attribute, class, style, value, disabled)
+import Html.Attributes exposing (attribute, class, style, value, disabled, checked, type_)
 import Html exposing (..)
 
 import Task
@@ -42,6 +42,8 @@ view model =
     , input [ value "value of input" ] []
     , button [ class "disabled-button", disabled True ] [ text "disabled button" ]
     , button [ class "enabled-button" ] [ text "enabled button" ]
+    , input [ class "checked-checkbox", type_ "checkbox", checked True] []
+    , input [ class "unchecked-checkbox", type_ "checkbox", checked False] []
     ]
 
 
@@ -128,6 +130,12 @@ specs =
         [ assert.elementDisabled ".disabled-button"]
       , it "should check if element is not disabled"
         [ assert.not.elementDisabled ".enabled-button"]
+      ]
+    , describe ".checkboxChecked"
+      [ it "should check if checkbox is checked"
+        [ assert.checkboxChecked ".checked-checkbox" ]
+      , it "should check if checkbox is unchecked"
+        [ assert.not.checkboxChecked ".unchecked-checkbox" ]
       ]
     , describe ".titleContains"
       [ it "should check if title contains text"

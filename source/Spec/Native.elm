@@ -72,6 +72,13 @@ elementVisible =
   Native.Spec.elementVisible
 
 
+{-| Checks if the given checkbox is checked on the page.
+-}
+checkboxChecked: String -> Assertion
+checkboxChecked =
+  Native.Spec.checkboxChecked
+
+
 {-| Checks if the page title contains the given value.
 -}
 titleContains : String -> Assertion

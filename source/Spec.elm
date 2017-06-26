@@ -227,6 +227,7 @@ assert :
   , elementPresent : String -> Assertion
   , elementDisabled : String -> Assertion
   , elementVisible : String -> Assertion
+  , checkboxChecked : String -> Assertion
   , titleContains : String -> Assertion
   , valueEquals : TextData -> Assertion
   , titleEquals : String -> Assertion
@@ -242,6 +243,7 @@ assert :
     , styleEquals : StyleData -> Assertion
     , elementPresent : String -> Assertion
     , elementDisabled : String -> Assertion
+    , checkboxChecked : String -> Assertion
     , elementVisible : String -> Assertion
     , titleContains : String -> Assertion
     , valueEquals : TextData -> Assertion
@@ -257,6 +259,7 @@ assert =
   , elementPresent = Spec.Native.elementPresent
   , elementDisabled = Spec.Native.elementDisabled
   , elementVisible = Spec.Native.elementVisible
+  , checkboxChecked = Spec.Native.checkboxChecked
   , valueContains = Spec.Native.valueContains
   , titleContains = Spec.Native.titleContains
   , containsText = Spec.Native.containsText
@@ -273,6 +276,7 @@ assert =
     , elementPresent = Spec.Native.elementPresent >> flip
     , elementDisabled = Spec.Native.elementDisabled >> flip
     , elementVisible = Spec.Native.elementVisible >> flip
+    , checkboxChecked = Spec.Native.checkboxChecked >> flip
     , valueContains = Spec.Native.valueContains >> flip
     , titleContains = Spec.Native.titleContains >> flip
     , containsText = Spec.Native.containsText >> flip
