@@ -303,6 +303,7 @@ steps :
   , getUrl : Task Never String
   , click : String -> Step
   , inputViaPort : String -> Json.Value -> Step
+  , getBody : Task Never String
   }
 steps =
   { dispatchEvent = Native.Spec.dispatchEvent
@@ -315,6 +316,7 @@ steps =
   , getUrl = Native.Spec.getUrl
   , click = Native.Spec.click
   , inputViaPort = Native.Spec.inputViaPort
+  , getBody = Native.Spec.getBody
   }
 
 

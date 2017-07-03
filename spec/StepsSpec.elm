@@ -59,6 +59,10 @@ specs =
             "Testing if attribute equals with getAttribute"
         ]
       ]
+    , describe ".getBody"
+      [ it "should return the document body"
+        [ steps.getBody |> Expect.equals "<testing-node-123456><test><div test=\"test\">Empty</div><input></test></testing-node-123456>" "Testing can get body"]
+      ]
     , describe ".setValue"
       [ it "should set value of element"
         [ assert.valueEquals { text = "", selector = "input" }

@@ -402,6 +402,10 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     callback(succeed(document.title.toString()))
   })
 
+  var getBody = task(function (callback) {
+    callback(succeed(document.body.innerHTML))
+  })
+
   var getUrl = task(function (callback) {
     callback(succeed(window.location.toString()))
   })
@@ -493,6 +497,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     setLayout: setLayout,
     urlEquals: urlEquals,
     getTestId: getTestId,
+    getBody: getBody,
     getTitle: getTitle,
     getUrl: getUrl,
     getBoundingClientRect: function (selector) {
