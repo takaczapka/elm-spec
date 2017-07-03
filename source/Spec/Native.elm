@@ -100,6 +100,13 @@ urlContains =
   Native.Spec.urlContains
 
 
+{-| Checks if the current body contains the given value.
+-}
+bodyContains : String -> Assertion
+bodyContains =
+  Native.Spec.bodyContains
+
+
 {-| Checks if the current url equals the given value.
 -}
 urlEquals : String -> Assertion

@@ -233,6 +233,7 @@ assert :
   , titleEquals : String -> Assertion
   , urlContains : String -> Assertion
   , urlEquals : String -> Assertion
+  , bodyContains : String -> Assertion
   , not :
     { attributeContains : AttributeData -> Assertion
     , attributeEquals : AttributeData -> Assertion
@@ -250,6 +251,7 @@ assert :
     , titleEquals : String -> Assertion
     , urlContains : String -> Assertion
     , urlEquals : String -> Assertion
+    , bodyContains : String -> Assertion
     }
   }
 assert =
@@ -269,6 +271,7 @@ assert =
   , valueEquals = Spec.Native.valueEquals
   , urlContains = Spec.Native.urlContains
   , urlEquals = Spec.Native.urlEquals
+  , bodyContains = Spec.Native.bodyContains
   , not =
     { attributeContains = Spec.Native.attributeContains >> flip
     , inlineStyleEquals = Spec.Native.inlineStyleEquals >> flip
@@ -286,6 +289,7 @@ assert =
     , valueEquals = Spec.Native.valueEquals >> flip
     , urlContains = Spec.Native.urlContains >> flip
     , urlEquals = Spec.Native.urlEquals >> flip
+    , bodyContains = Spec.Native.bodyContains >> flip
     }
   }
 

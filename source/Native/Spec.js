@@ -268,6 +268,17 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     })
   }
 
+    var bodyContains = function (text) {
+        return task(function (callback) {
+            var body = document.body.innerHTML
+            if (body.indexOf(text) >= 0) {
+                callback(succeed(pass('Body ' + boldString(body) + ' contains text ' + boldString(text))))
+            } else {
+                callback(succeed(fail('Body ' + boldString(body) + ' does not contain text ' + boldString(text))))
+            }
+        })
+    }
+
   var valueContains = function (text, selector) {
     return taskWithElement(selector, function (element) {
       var value = (element.value || '').toString()
@@ -490,6 +501,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     valueEquals: F2(valueEquals),
     titleEquals: titleEquals,
     urlContains: urlContains,
+    bodyContains: bodyContains,
     clearValue: clearValue,
     clearValueAndDispatch: F2(clearValueAndDispatch),
     setValue: F2(setValue),
