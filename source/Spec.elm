@@ -6,6 +6,7 @@ module Spec exposing
   , get
   , put
   , post
+  , delete
   , withEntity
   , Response
   , Request
@@ -49,7 +50,7 @@ module Spec exposing
 @docs before, after
 
 # Http
-@docs http, get, put, post, withEntity
+@docs http, get, put, post, delete, withEntity
 
 # Layout
 @docs layout
@@ -193,6 +194,12 @@ put url response =
 post : String -> Response -> Request
 post url response =
     Request "POST" url "" response
+
+{-| Delete sugar
+-}
+delete : String -> Response -> Request
+delete url response =
+    Request "DELETE" url "" response
 
 {-| set body -}
 withEntity : String -> Request -> Request
