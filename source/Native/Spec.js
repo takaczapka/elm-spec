@@ -465,7 +465,12 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
         HttpMock.setup()
         HttpMock.mock(function (request, response) {
             var matching = requests.filter(function (mock) {
-                return request.method() === mock.method && request.url() === mock.url
+                if ((request.method() === "POST" || request.method() === "PUT") && mock.entity !== "") {
+                  return request.method() === mock.method && request.url() === mock.url &&
+                    request.body() === mock.entity
+                } else {
+                  return request.method() === mock.method && request.url() === mock.url
+                }
             })
             if (matching.length === 1) {
                 var mock = matching[0]
@@ -477,7 +482,8 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
                 unhandledResults[test.id].push({
                     method: request.method(),
                     url: request.url(),
-                    response: {statue: 200, body: ''}
+                    entity: request._body,
+                    response: {status: 200, body: ''}
                 })
             }
         })

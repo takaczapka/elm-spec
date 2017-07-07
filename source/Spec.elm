@@ -3,6 +3,12 @@ module Spec exposing
   , Node
   , Step
   , Test
+  , get
+  , put
+  , post
+  , withEntity
+  , Response
+  , Request
   , group
   , context
   , describe
@@ -22,7 +28,7 @@ module Spec exposing
 {-| This module provides a way to test Elm apps end-to-end in the browser.
 
 # Types
-@docs Test, Node, Step
+@docs Test, Node, Step, Request, Response
 
 # Grouping
 @docs group, context, describe
@@ -43,7 +49,7 @@ module Spec exposing
 @docs before, after
 
 # Http
-@docs http
+@docs http, get, put, post, withEntity
 
 # Layout
 @docs layout
@@ -51,6 +57,7 @@ module Spec exposing
 # Running
 @docs run, runWithProgram
 -}
+import Http exposing (Body)
 import Spec.Assertions exposing (pass, fail, error)
 import Spec.Runner exposing (Prog, State)
 import Spec.Messages exposing (Msg)
@@ -70,6 +77,12 @@ type alias Step =
 -}
 type alias Test msg =
   Spec.Types.Test msg
+
+
+{-|-}
+type alias Response = Spec.Types.Response
+{-|-}
+type alias Request = Spec.Types.Request
 
 
 {-| The outcome of an assertion or step.
@@ -161,6 +174,30 @@ http : List Request -> Node msg
 http =
   Http
 
+
+{-| Get sugar
+-}
+get : String -> Response -> Request
+get url response =
+    Request "GET" url "" response
+
+
+{-| Put sugar
+-}
+put : String -> Response -> Request
+put url response =
+    Request "PUT" url "" response
+
+{-| Post sugar
+-}
+post : String -> Response -> Request
+post url response =
+    Request "POST" url "" response
+
+{-| set body -}
+withEntity : String -> Request -> Request
+withEntity entity req =
+    { req | entity = entity }
 
 {-| Groups the given steps into a step group. Step groups makes it easy to
 run multiple steps under one message.

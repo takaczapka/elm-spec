@@ -70,7 +70,7 @@ renderTest model =
     renderRequest class request =
       div
         [ stylesheet.class class ]
-        [ text (request.method ++ " - " ++ request.url) ]
+        [ text (request.method ++ " - " ++ request.url ++ " - " ++ request.entity) ]
 
     requestResults =
       if List.isEmpty requests.called

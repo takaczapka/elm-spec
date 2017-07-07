@@ -52,11 +52,7 @@ specs : Node msg
 specs =
   describe "Spec.Steps"
     [ http
-       [ { method = "GET"
-         , url = "/test"
-         , response = { status = 200, body = "\"new-value\"" }
-         }
-       ]
+      [ get "/test" { status = 200, body = "\"new-value\"" } ]
     , describe ".setValue"
       [ it "should set value of element on init"
         [ assert.containsText { text = "new-value", selector = ".value" }

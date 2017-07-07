@@ -25,10 +25,14 @@ type alias Test msg =
 type alias Request =
   { method : String
   , url : String
-  , response :
-    { status : Int
-    , body : String
-    }
+  , entity : String
+  , response : Response
+  }
+
+
+type alias Response =
+  { status : Int
+  , body : String
   }
 
 type alias Rect =

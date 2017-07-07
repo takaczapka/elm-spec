@@ -48,16 +48,23 @@ class DocumentationReporter extends Reporter {
         test.unhandledRequests.length) {
       result.push(indentString('Requests:', 2))
 
+      var toString = function(req) {
+        var entityStr = ''
+        if (req.entity !== "") entityStr = ' - ' + req.entity
+
+        return req.method + ' - ' + req.url + entityStr
+      }
+
       test.mockedRequests.forEach(req => {
-        result.push(indentString(('✔ ' + req.method + ' - ' + req.url).green, 4))
+        result.push(indentString(('✔ ' + toString(req)).green, 4))
       })
 
       test.notMockedRequests.forEach(req => {
-        result.push(indentString(('✘ ' + req.method + ' - ' + req.url).red, 4))
+        result.push(indentString(('✘ ' + toString(req)).red, 4))
       })
 
       test.unhandledRequests.forEach(req => {
-        result.push(indentString(('? ' + req.method + ' - ' + req.url).bgRed, 4))
+        result.push(indentString(('? ' + toString(req)).bgRed, 4))
       })
     }
 

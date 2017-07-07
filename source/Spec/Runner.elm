@@ -213,6 +213,7 @@ report tests =
       Json.object
         [ ( "method", Json.string mock.method)
         , ( "url", Json.string mock.url )
+        , ( "entity", Json.string mock.entity )
         ]
 
     encodeResult result =
