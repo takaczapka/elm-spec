@@ -1,4 +1,7 @@
-module Spec.Messages exposing (..)
+module Spec.Internal.Messages exposing (..)
+{-|Internal module
+@docs Msg
+-}
 
 import Spec.Internal.CoreTypes exposing (..)
 

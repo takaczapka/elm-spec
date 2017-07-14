@@ -6,7 +6,7 @@ module Spec.Runner exposing (..)
 -}
 import Spec.Types exposing (Assertion, Test, Node)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
-import Spec.Messages exposing (Msg(..))
+import Spec.Internal.Messages exposing (Msg(..))
 import Spec.Reporter
 
 import Json.Encode as Json

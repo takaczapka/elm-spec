@@ -61,7 +61,7 @@ module Spec exposing
 import Http exposing (Body)
 import Spec.Assertions exposing (pass, fail, error)
 import Spec.Runner exposing (Prog, State)
-import Spec.Messages exposing (Msg)
+import Spec.Internal.Messages exposing (Msg)
 import Spec.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (..)
 import Spec.Native

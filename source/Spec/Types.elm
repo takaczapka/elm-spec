@@ -4,7 +4,7 @@ module Spec.Types exposing (..)
 -}
 import Task exposing (Task)
 import Spec.Internal.CoreTypes exposing (..)
-import Spec.Messages exposing (Msg)
+import Spec.Internal.Messages exposing (Msg)
 
 {-| Representation of a test.
 -}
