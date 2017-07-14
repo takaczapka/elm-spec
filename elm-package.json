@@ -10,7 +10,8 @@
   ],
   "exposed-modules": [
     "Spec.Assertions",
-    "Spec"
+    "Spec",
+    "Spec.Internal.CoreTypes"
   ],
   "dependencies": {
     "mdgriffith/style-elements": "2.0.1 <= v < 3.0.0",

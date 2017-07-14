@@ -6,8 +6,8 @@ module Spec.Reporter exposing (render)
 -}
 import Spec.Styles as Styles exposing (stylesheet)
 import Spec.Types exposing (..)
-import Spec.CoreTypes exposing (Outcome)
-import Spec.CoreTypes exposing (Outcome(..))
+import Spec.Internal.CoreTypes exposing (Outcome)
+import Spec.Internal.CoreTypes exposing (Outcome(..))
 
 import Json.Encode
 

@@ -63,7 +63,7 @@ import Spec.Assertions exposing (pass, fail, error)
 import Spec.Runner exposing (Prog, State)
 import Spec.Messages exposing (Msg)
 import Spec.Types exposing (..)
-import Spec.CoreTypes exposing (..)
+import Spec.Internal.CoreTypes exposing (..)
 import Spec.Native
 
 import Task exposing (Task)
@@ -89,7 +89,7 @@ type alias Request = Spec.Types.Request
 {-| The outcome of an assertion or step.
 -}
 type alias Outcome
-  = Spec.CoreTypes.Outcome
+  = Spec.Internal.CoreTypes.Outcome
 
 
 {-| Representation of a test tree (Node).

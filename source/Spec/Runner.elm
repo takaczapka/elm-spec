@@ -5,7 +5,7 @@ module Spec.Runner exposing (..)
 @docs run, runWithProgram
 -}
 import Spec.Types exposing (Assertion, Test, Node)
-import Spec.CoreTypes exposing (Outcome(..))
+import Spec.Internal.CoreTypes exposing (Outcome(..))
 import Spec.Messages exposing (Msg(..))
 import Spec.Reporter
 

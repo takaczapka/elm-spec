@@ -1,5 +1,7 @@
-module Spec.CoreTypes exposing (..)
-
+module Spec.Internal.CoreTypes exposing (..)
+{-|Internal module
+@docs Outcome
+-}
 
 {-| Represents an outcome for a step:
   * Error - if there was an error during the step (element not found for example)

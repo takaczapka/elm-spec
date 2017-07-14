@@ -3,7 +3,7 @@ module Spec.Types exposing (..)
 {-| This module contains the types for specs.
 -}
 import Task exposing (Task)
-import Spec.CoreTypes exposing (..)
+import Spec.Internal.CoreTypes exposing (..)
 import Spec.Messages exposing (Msg)
 
 {-| Representation of a test.

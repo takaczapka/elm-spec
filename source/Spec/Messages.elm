@@ -1,6 +1,6 @@
 module Spec.Messages exposing (..)
 
-import Spec.CoreTypes exposing (..)
+import Spec.Internal.CoreTypes exposing (..)
 
 {-| Messages for a test program.
 -}
