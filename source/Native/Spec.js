@@ -75,7 +75,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
     }
 
     var bold = function (message) {
-        return '\x1b[1m' + message + '\x1b[21m'
+        return '\x1b[1m' + message + '\x1b[0m'
     }
 
     var boldString = function (message) {
