@@ -1,4 +1,4 @@
-module Spec.Styles exposing (..)
+module Spec.Internal.Styles exposing (..)
 
 {-| Styles for the Html reporter.
 
