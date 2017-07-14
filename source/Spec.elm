@@ -60,7 +60,7 @@ module Spec exposing
 -}
 import Http exposing (Body)
 import Spec.Assertions exposing (pass, fail, error)
-import Spec.Runner exposing (Prog, State)
+import Spec.Internal.Runner exposing (Prog, State)
 import Spec.Internal.Messages exposing (Msg)
 import Spec.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (..)
@@ -375,11 +375,11 @@ steps =
 -}
 run : Node msg -> Program Never (State String msg) (Msg msg)
 run =
-  Spec.Runner.run
+  Spec.Internal.Runner.run
 
 
 {-| Runs the given tests with the given app / component.
 -}
 runWithProgram : Prog model msg -> Node msg -> Program Never (State model msg) (Msg msg)
 runWithProgram =
-  Spec.Runner.runWithProgram
+  Spec.Internal.Runner.runWithProgram

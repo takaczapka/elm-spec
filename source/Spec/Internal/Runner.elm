@@ -1,4 +1,4 @@
-module Spec.Runner exposing (..)
+module Spec.Internal.Runner exposing (..)
 
 {-| This module runs the tests with or without an app.
 
