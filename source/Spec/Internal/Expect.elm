@@ -5,7 +5,7 @@ Feel free to use, but it's more unstable than 'public' modules.
 -}
 
 import Spec.Assertions exposing (fail, pass)
-import Spec.Types exposing (..)
+import Spec.Internal.Types exposing (..)
 import Task exposing (Task)
 
 {-| equals

@@ -62,7 +62,7 @@ import Http exposing (Body)
 import Spec.Assertions exposing (pass, fail, error)
 import Spec.Internal.Runner exposing (Prog, State)
 import Spec.Internal.Messages exposing (Msg)
-import Spec.Types exposing (..)
+import Spec.Internal.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (..)
 import Spec.Native
 
@@ -72,18 +72,18 @@ import Json.Decode as Json
 {-| Representation of a step.
 -}
 type alias Step =
-  Spec.Types.Step
+  Spec.Internal.Types.Step
 
 {-| Representation of a test.
 -}
 type alias Test msg =
-  Spec.Types.Test msg
+  Spec.Internal.Types.Test msg
 
 
 {-|-}
-type alias Response = Spec.Types.Response
+type alias Response = Spec.Internal.Types.Response
 {-|-}
-type alias Request = Spec.Types.Request
+type alias Request = Spec.Internal.Types.Request
 
 
 {-| The outcome of an assertion or step.
@@ -95,7 +95,7 @@ type alias Outcome
 {-| Representation of a test tree (Node).
 -}
 type alias Node msg =
-  Spec.Types.Node msg
+  Spec.Internal.Types.Node msg
 
 
 flip =

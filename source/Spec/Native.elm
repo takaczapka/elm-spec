@@ -1,5 +1,4 @@
 module Spec.Native exposing (..)
-
 {-| Functions for native modules containing assertions.
 
 # Assertions
@@ -7,11 +6,13 @@ module Spec.Native exposing (..)
 @docs styleEquals, elementPresent, elementVisible, titleContains
 @docs titleEquals, urlContains, urlEquals, valueContains, valueEquals
 @docs clearValueAndDispatch
+@docs bodyContains, checkboxChecked, elementDisabled, inlineStyleEquals
+@docs setValueAndDispatch
 
 # Steps
 @docs clearValueAndDispatch
 -}
-import Spec.Types exposing (..)
+import Spec.Internal.Types exposing (..)
 import Task exposing (Task)
 import Native.HttpMock
 import Native.Spec

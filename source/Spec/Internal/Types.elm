@@ -1,6 +1,8 @@
-module Spec.Types exposing (..)
-
-{-| This module contains the types for specs.
+module Spec.Internal.Types exposing (..)
+{-| This internal module contains the types for specs.
+@docs Test, Request, Response, Rect, Node, Assertion, Group, Step
+@docs AttributeData, ClassData, EventData, StyleData, TextData, ValueData, ValueWithEventData
+@docs flatten, outcomeToString
 -}
 import Task exposing (Task)
 import Spec.Internal.CoreTypes exposing (..)
@@ -31,11 +33,15 @@ type alias Request =
   }
 
 
+{-| Representation of a mocked response.
+-}
 type alias Response =
   { status : Int
   , body : String
   }
 
+{-| Representation of a rectangle.
+-}
 type alias Rect =
   { top : Int
   , left : Int

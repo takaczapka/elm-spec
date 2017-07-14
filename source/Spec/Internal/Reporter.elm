@@ -4,7 +4,7 @@ module Spec.Internal.Reporter exposing (render)
 @docs render
 -}
 import Spec.Internal.Styles as Styles exposing (stylesheet)
-import Spec.Types exposing (..)
+import Spec.Internal.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (Outcome)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
 

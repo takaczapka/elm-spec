@@ -1,5 +1,5 @@
 {
-  "version": "1.1.15",
+  "version": "1.1.16",
   "summary": "Integration testing in Elm.",
   "repository": "https://github.com/takaczapka/elm-spec.git",
   "license": "BSD3",
@@ -11,8 +11,14 @@
   "exposed-modules": [
     "Spec.Assertions",
     "Spec",
+    "Spec.Native",
     "Spec.Internal.CoreTypes",
-    "Spec.Internal.Expect"
+    "Spec.Internal.Expect",
+    "Spec.Internal.Messages",
+    "Spec.Internal.Reporter",
+    "Spec.Internal.Runner",
+    "Spec.Internal.Styles",
+    "Spec.Internal.Types"
   ],
   "dependencies": {
     "mdgriffith/style-elements": "2.0.1 <= v < 3.0.0",

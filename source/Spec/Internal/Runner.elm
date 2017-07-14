@@ -1,10 +1,10 @@
 module Spec.Internal.Runner exposing (..)
-
 {-| This module runs the tests with or without an app.
-
+@docs State, Prog
 @docs run, runWithProgram
+@docs perform, report, update, view
 -}
-import Spec.Types exposing (Assertion, Test, Node)
+import Spec.Internal.Types exposing (Assertion, Test, Node)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
 import Spec.Internal.Messages exposing (Msg(..))
 import Spec.Internal.Reporter
@@ -177,7 +177,7 @@ runWithProgram data tests =
     processedTests : Cmd (Msg msg) -> List (Test msg)
     processedTests initCmd =
       tests
-      |> Spec.Types.flatten []
+      |> Spec.Internal.Types.flatten []
       |> List.indexedMap (\index item -> { item | id = index, initCmd = Just initCmd })
 
     testToRun : Cmd (Msg msg) -> List (Test msg)

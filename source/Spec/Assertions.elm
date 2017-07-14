@@ -6,7 +6,7 @@ module Spec.Assertions exposing (..)
 @docs Outcome, fail, pass, error, flip
 -}
 
-import Spec.Types exposing (..)
+import Spec.Internal.Types exposing (..)
 import Task exposing (Task)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
 
