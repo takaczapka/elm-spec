@@ -50,7 +50,7 @@ class DocumentationReporter extends Reporter {
 
       var toString = function(req) {
         var entityStr = ''
-        if (req.entity !== "") entityStr = ' - ' + req.entity
+        if (req.entity) entityStr = ' - ' + req.entity
 
         return req.method + ' - ' + req.url + entityStr
       }

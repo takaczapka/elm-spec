@@ -71,15 +71,20 @@ update msg model =
                 Just result ->
                   { test | results = test.results ++ [result] }
 
-                Nothing -> test
+                Nothing ->
+                    let
+                    -- no results so the test is about to start running
+                    -- mock test's requests then
+                     _ =
+                         Native.Spec.mockHttpRequests test
+                    in
+                        test
+
           in
             case test.initCmd of
                 Just cmd ->
                     -- if there is app init Cmd to run, run it
                     let
-                        _ =
-                            Native.Spec.mockHttpRequests test
-
                         _ =
                             Native.Spec.setLayout test.layout
 
@@ -91,9 +96,6 @@ update msg model =
                       -- Take the next step
                       step :: remainingSteps ->
                         let
-                          _ =
-                            Native.Spec.mockHttpRequests test
-
                           _ =
                             Native.Spec.setLayout test.layout
 
