@@ -1,5 +1,4 @@
-module Spec.Reporter exposing (render)
-
+module Spec.Internal.Reporter exposing (render)
 {-| Renders test results in Html.
 
 @docs render

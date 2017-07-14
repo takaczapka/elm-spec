@@ -7,7 +7,7 @@ module Spec.Runner exposing (..)
 import Spec.Types exposing (Assertion, Test, Node)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
 import Spec.Internal.Messages exposing (Msg(..))
-import Spec.Reporter
+import Spec.Internal.Reporter
 
 import Json.Encode as Json
 import Task
@@ -146,7 +146,7 @@ view model =
     nodes =
       if List.isEmpty model.tests then
         [ app
-        , ( "report", Html.map App (Spec.Reporter.render model.finishedTests) )
+        , ( "report", Html.map App (Spec.Internal.Reporter.render model.finishedTests) )
         ]
       else
         [ app ]
