@@ -66,19 +66,23 @@ update msg model =
         test :: remainingTests ->
           let
             -- If we got a result add it to the test
-            updatedTest =
+            updatedWithResults =
               case maybeResult of
                 Just result ->
                   { test | results = test.results ++ [result] }
 
                 Nothing ->
-                    let
-                    -- no results so the test is about to start running
-                    -- mock test's requests then
-                     _ =
-                         Native.Spec.mockHttpRequests test
-                    in
                         test
+
+            updatedTest =
+              if not(test.httpMockInitialised) then
+                let
+                  _ =
+                    Native.Spec.mockHttpRequests test
+                in
+                  { updatedWithResults | httpMockInitialised = True}
+                else
+                  updatedWithResults
 
           in
             case test.initCmd of

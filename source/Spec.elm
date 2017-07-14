@@ -144,6 +144,7 @@ test name steps =
     , path = []
     , id = -1
     , initCmd = Nothing
+    , httpMockInitialised = False
     }
 
 

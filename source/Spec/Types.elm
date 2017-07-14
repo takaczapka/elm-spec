@@ -17,6 +17,7 @@ type alias Test msg =
   , path : List String
   , name : String
   , id : Int
+  , httpMockInitialised : Bool
   }
 
 
