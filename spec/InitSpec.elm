@@ -1,5 +1,5 @@
 import Spec exposing (..)
-import Spec.Expect as Expect
+import Spec.Internal.Expect as Expect
 
 import Html.Events exposing (onClick, on, keyCode)
 import Html.Attributes exposing (class, attribute)
@@ -58,4 +58,3 @@ main =
 fire : msg -> Cmd msg
 fire msg =
     Task.perform identity (Task.succeed msg)
-
