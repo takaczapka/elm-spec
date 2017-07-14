@@ -45,16 +45,21 @@ view model =
 tests =
   describe "Sequential Http Mocking"
     [ http
-      [ get "/test" { status = 200, body = "\"OK /first\"" }
-      ,  get "/test" { status = 200, body = "\"OK /second\"" }
-      ]
-    , it "should validate mock http requests sequentially"
-      [ assert.containsText { selector = "span", text = "" }
-      , steps.click "button.get-test"
-      , assert.containsText { selector = "span", text = "OK /first" }
-      , steps.click "button.get-test"
-      , assert.containsText { selector = "span", text = "OK /second" }
-      ]
+          [ get "/test" { status = 200, body = "\"OK /first\"" }
+          ]
+    , describe "Sequential Http Mocking"
+        [ http
+          [
+           get "/test" { status = 200, body = "\"OK /second\"" }
+          ]
+        , it "should validate mock http requests sequentially"
+          [ assert.containsText { selector = "span", text = "" }
+          , steps.click "button.get-test"
+          , assert.containsText { selector = "span", text = "OK /first" }
+          , steps.click "button.get-test"
+          , assert.containsText { selector = "span", text = "OK /second" }
+          ]
+        ]
     ]
 
 main =

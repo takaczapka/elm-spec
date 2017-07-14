@@ -199,7 +199,7 @@ flatten tests node =
           |> List.map (\test ->
             { test
             | steps = beforeSteps ++ test.steps ++ afterSteps
-            , requests = test.requests ++ requests
+            , requests = requests ++ test.requests
             , path = [node.name] ++ test.path
             , layout = test.layout ++ layout
             })
