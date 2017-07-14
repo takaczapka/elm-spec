@@ -83,7 +83,7 @@ update msg model =
                         _ =
                             Native.Spec.setLayout test.layout
 
-                        testWithoutCmd = { test | initCmd = Nothing }
+                        testWithoutCmd = { updatedTest | initCmd = Nothing }
                     in
                         ({ model | tests = testWithoutCmd :: remainingTests }, Cmd.batch [ cmd, perform (Next Nothing) ] )
                 Nothing ->
