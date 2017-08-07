@@ -54,6 +54,12 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
         return this.oldGetBoundingClientRect()
     }
 
+    function triggerMouseEvent (node, eventType) {
+        var clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent (eventType, true, true);
+        node.dispatchEvent (clickEvent);
+    }
+
     var task = _elm_lang$core$Native_Scheduler.nativeBinding
     var succeed = _elm_lang$core$Native_Scheduler.succeed
     var fromArray = _elm_lang$core$Native_List.fromArray
@@ -336,6 +342,14 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
         })
     }
 
+    var mouseDown = function (selector) {
+        return taskWithElement(selector, function (element) {
+            triggerMouseEvent (element, "mousedown");
+            triggerMouseEvent (element, "mouseup");
+            return pass('MouseDown: ' + bold(selector))
+        })
+    }
+
     var setValue = function (value, selector) {
         return taskWithElement(selector, function (element) {
             element.value = value
@@ -566,6 +580,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
             })
         },
         click: click,
+        mouseDown: mouseDown,
         inputViaPort: F2(inputViaPort),
         raf: raf()
     }

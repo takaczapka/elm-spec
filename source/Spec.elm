@@ -351,6 +351,7 @@ steps :
   , clearValueAndDispatch : EventData -> Step
   , getUrl : Task Never String
   , click : String -> Step
+  , mouseDown : String -> Step
   , inputViaPort : String -> Json.Value -> Step
   , getBody : Task Never String
   , logBody : Step
@@ -365,6 +366,7 @@ steps =
   , setValueAndDispatch = Spec.Native.setValueAndDispatch
   , getUrl = Native.Spec.getUrl
   , click = Native.Spec.click
+  , mouseDown = Native.Spec.mouseDown
   , inputViaPort = Native.Spec.inputViaPort
   , getBody = Native.Spec.getBody
   , logBody = Native.Spec.logBody
