@@ -337,16 +337,10 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
 
     var click = function (selector) {
         return taskWithElement(selector, function (element) {
-            element.click()
-            return pass('Clicked: ' + bold(selector))
-        })
-    }
-
-    var mouseDown = function (selector) {
-        return taskWithElement(selector, function (element) {
             triggerMouseEvent (element, "mousedown");
+            element.click()
             triggerMouseEvent (element, "mouseup");
-            return pass('MouseDown: ' + bold(selector))
+            return pass('Clicked: ' + bold(selector))
         })
     }
 
@@ -580,7 +574,6 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
             })
         },
         click: click,
-        mouseDown: mouseDown,
         inputViaPort: F2(inputViaPort),
         raf: raf()
     }
