@@ -472,19 +472,19 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
 
         HttpMock.setup()
         HttpMock.mock(function (request, response) {
-            var mock = requests.shift()
-            var matching = undefined
+          var mock = requests.shift()
+          var matching = undefined
 
-            if (mock !== undefined && request.method() === mock.method && request.url() === mock.url) {
-              if ((request.method() === "POST" || request.method() === "PUT") &&
-                    (!mock.entity || mock.entity === request.body())) {
-                matching = mock
-              } else {
-                matching = mock
+          if (mock !== undefined && request.method() === mock.method && request.url() === mock.url) {
+            if (request.method() === "POST" || request.method() === "PUT") {
+              if (!mock.entity || mock.entity === request.body()) {
+                matching = mock;
               }
+            } else {
+              matching = mock;
             }
-
-            if (matching !== undefined) {
+          }
+          if (matching !== undefined) {
                 response.status(mock.response.status)
                 response.body(mock.response.body)
                 mockResults[test.id].push(mock)
