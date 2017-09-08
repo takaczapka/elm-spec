@@ -18,12 +18,16 @@ module Spec exposing
   , before
   , after
   , http
+  , stub, cycle, repeat, stubResult
   , layout
   , stepGroup
   , assert
   , steps
   , run
   , runWithProgram
+  , runWithSpi
+  , runWithProgramWithSpi
+
   )
 
 {-| This module provides a way to test Elm apps end-to-end in the browser.
@@ -52,15 +56,18 @@ module Spec exposing
 # Http
 @docs http, get, put, post, delete, withEntity
 
+# Stub
+@docs stub, repeat, cycle, stubResult
+
 # Layout
 @docs layout
 
 # Running
-@docs run, runWithProgram
+@docs run, runWithProgram, runWithSpi, runWithProgramWithSpi
 -}
 import Http exposing (Body)
 import Spec.Assertions exposing (pass, fail, error)
-import Spec.Internal.Runner exposing (Prog, State)
+import Spec.Internal.Runner exposing (Prog, ProgWithSpi, State)
 import Spec.Internal.Messages exposing (Msg)
 import Spec.Internal.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (..)
@@ -68,6 +75,10 @@ import Spec.Native
 
 import Task exposing (Task)
 import Json.Decode as Json
+import Bitwise
+import Char
+import Dict
+
 
 {-| Representation of a step.
 -}
@@ -76,8 +87,8 @@ type alias Step =
 
 {-| Representation of a test.
 -}
-type alias Test msg =
-  Spec.Internal.Types.Test msg
+type alias Test spi msg =
+  Spec.Internal.Types.Test spi msg
 
 
 {-|-}
@@ -95,7 +106,12 @@ type alias Outcome
 {-| Representation of a test tree (Node).
 -}
 type alias Node msg =
-  Spec.Internal.Types.Node msg
+  Spec.Internal.Types.Node () msg
+
+{-| Representation of a test tree (Node).
+-}
+type alias NodeWithSpi spi msg =
+  Spec.Internal.Types.Node spi msg
 
 
 flip =
@@ -110,21 +126,21 @@ flip =
         ]
       ]
 -}
-group : String -> List (Node msg) -> Node msg
+group : String -> List (NodeWithSpi spi msg) -> NodeWithSpi spi msg
 group name nodes =
   GroupNode { name = name, nodes = nodes }
 
 
 {-| Alias for `group`.
 -}
-context : String -> List (Node msg) -> Node msg
+context : String -> List (NodeWithSpi spi msg) -> NodeWithSpi spi msg
 context =
   group
 
 
 {-| Alias for `group`.
 -}
-describe : String -> List (Node msg) -> Node msg
+describe : String -> List (NodeWithSpi spi msg) -> NodeWithSpi spi msg
 describe =
   group
 
@@ -133,11 +149,12 @@ describe =
 
     test "description"
 -}
-test : String -> List Assertion -> Node msg
+test : String -> List Assertion -> NodeWithSpi spi msg
 test name steps =
   TestNode
     { steps = steps
     , requests = []
+    , stubs = []
     , results = []
     , layout = []
     , name = name
@@ -150,31 +167,72 @@ test name steps =
 
 {-| Alias for `it`.
 -}
-it : String -> List Assertion -> Node msg
+it : String -> List Assertion -> NodeWithSpi spi msg
 it =
   test
 
 
 {-|-}
-before : List Assertion -> Node msg
+before : List Assertion -> NodeWithSpi spi msg
 before =
   Before
 
 {-|-}
-layout : List (String, Rect) -> Node msg
+layout : List (String, Rect) -> NodeWithSpi spi msg
 layout =
   Layout
 
 {-|-}
-after : List Assertion -> Node msg
+after : List Assertion -> NodeWithSpi spi msg
 after =
   After
 
 
 {-|-}
-http : List Request -> Node msg
+http : List Request -> NodeWithSpi spi msg
 http =
   Http
+
+
+{-|-}
+stub : List (spi -> spi) -> NodeWithSpi spi msg
+stub =
+  Stub
+
+
+{-|-}
+repeat : a -> Cmd a
+repeat value =
+    stubResult ("repeat: " ++ (toString value)) (always value)
+
+{-|-}
+cycle : List a -> Cmd a
+cycle values =
+    let
+        dict : Dict.Dict Int a
+        dict = Dict.fromList (List.indexedMap (\i a -> (i, a)) values)
+
+        value : Int -> a
+        value invocationCount =
+            let
+                idx = (((invocationCount - 1) % List.length values))
+            in
+                case Dict.get idx dict of
+                    Just result -> result
+                    Nothing -> Debug.crash "No value found"
+    in
+        stubResult ("cycle: " ++ toString values) value
+
+
+{-|-}
+stubResult: String -> (Int -> a) -> Cmd a
+stubResult id fn =
+    let
+        djb2Hash : Int
+        djb2Hash =
+          String.foldl (\c h -> (Bitwise.shiftLeftBy h 5) + h + Char.toCode c) 5381 id
+    in
+        Task.perform fn (Spec.Native.unsafeInvocationCount djb2Hash)
 
 
 {-| Get sugar
@@ -373,13 +431,27 @@ steps =
 
 {-| Runs the given tests without an app / component.
 -}
-run : Node msg -> Program Never (State String msg) (Msg msg)
+run : Node msg -> Program Never (State () String msg) (Msg msg)
 run =
-  Spec.Internal.Runner.run
+  runWithSpi ()
 
 
 {-| Runs the given tests with the given app / component.
 -}
-runWithProgram : Prog model msg -> Node msg -> Program Never (State model msg) (Msg msg)
-runWithProgram =
+runWithProgram : Prog model msg -> Node msg -> Program Never (State () model msg) (Msg msg)
+runWithProgram prog =
+  runWithProgramWithSpi { prog | update = always prog.update } ()
+
+
+{-| Runs the given tests with a & Service Provider Interface but without an app / component
+-}
+runWithSpi : spi -> NodeWithSpi spi msg -> Program Never (State spi String msg) (Msg msg)
+runWithSpi =
+  Spec.Internal.Runner.run
+
+
+{-| Runs the given tests with the given app / component & Service Provider Interface
+-}
+runWithProgramWithSpi : ProgWithSpi spi model msg -> spi -> NodeWithSpi spi msg -> Program Never (State spi model msg) (Msg msg)
+runWithProgramWithSpi =
   Spec.Internal.Runner.runWithProgram

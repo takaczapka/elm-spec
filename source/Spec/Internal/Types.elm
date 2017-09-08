@@ -10,9 +10,10 @@ import Spec.Internal.Messages exposing (Msg)
 
 {-| Representation of a test.
 -}
-type alias Test msg =
+type alias Test spi msg =
   { layout : List (String, Rect)
   , requests : List Request
+  , stubs: List (spi -> spi)
   , results : List Outcome
   , initCmd : Maybe (Cmd (Msg msg))
   , steps : List Assertion
@@ -54,19 +55,20 @@ type alias Rect =
 
 {-| Representation of a test tree (Node).
 -}
-type Node msg
+type Node spi msg
   = Layout (List (String, Rect))
   | Before (List Assertion)
   | After (List Assertion)
   | Http (List Request)
-  | GroupNode (Group msg)
-  | TestNode (Test msg)
+  | Stub (List (spi -> spi))
+  | GroupNode (Group spi msg)
+  | TestNode (Test spi msg)
 
 
 {-| Representation of a test group.
 -}
-type alias Group msg =
-  { nodes : List (Node msg)
+type alias Group spi msg =
+  { nodes : List (Node spi msg)
   , name : String
   }
 
@@ -134,7 +136,7 @@ outcomeToString outcome =
 
 {-| Turns a tree into a flat list of tests.
 -}
-flatten : List (Test msg) -> Node msg -> List (Test msg)
+flatten : List (Test spi msg) -> Node spi msg -> List (Test spi msg)
 flatten tests node =
   case node of
     -- There branches are processed in the group below
@@ -145,6 +147,9 @@ flatten tests node =
       tests
 
     Http mocks ->
+      tests
+
+    Stub f ->
       tests
 
     Layout layout ->
@@ -159,6 +164,11 @@ flatten tests node =
         getRequests nd =
           case nd of
             Http requests -> requests
+            _ -> []
+
+        getStubs nd =
+          case nd of
+            Stub stubs -> stubs
             _ -> []
 
         getBefores nd =
@@ -197,6 +207,10 @@ flatten tests node =
           List.map getRequests node.nodes
             |> List.foldr (++) []
 
+        stubs =
+          List.map getStubs node.nodes
+            |> List.foldr (++) []
+
         layout =
           List.map getLayouts node.nodes
             |> List.foldr (++) []
@@ -207,6 +221,7 @@ flatten tests node =
             { test
             | steps = beforeSteps ++ test.steps ++ afterSteps
             , requests = requests ++ test.requests
+            , stubs = stubs
             , path = [node.name] ++ test.path
             , layout = test.layout ++ layout
             })

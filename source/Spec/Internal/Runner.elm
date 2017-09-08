@@ -1,8 +1,8 @@
 module Spec.Internal.Runner exposing (..)
 {-| This module runs the tests with or without an app.
-@docs State, Prog
+@docs State, Prog, ProgWithSpi
 @docs run, runWithProgram
-@docs perform, report, update, view
+@docs perform, report, update, view, chain
 -}
 import Spec.Internal.Types exposing (Assertion, Test, Node)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
@@ -18,20 +18,31 @@ import Html
 
 {-| Represents the state of a test program.
 -}
-type alias State model msg =
-  { update : msg -> model -> ( model, Cmd msg )
+type alias State spi model msg =
+  { update : spi -> msg -> model -> ( model, Cmd msg )
   , view : model -> Html.Html msg
-  , finishedTests : List (Test msg)
+  , finishedTests : List (Test spi msg)
   , appInit : () -> model
-  , tests : List (Test msg)
+  , tests : List (Test spi msg)
   , counter : Int
   , app : model
+  , spi : spi
   }
 
 {-| Representation of an app.
 -}
 type alias Prog model msg =
   { update : msg -> model -> ( model, Cmd msg )
+  , subscriptions : model -> Sub msg
+  , view : model -> Html.Html msg
+  , init : () -> model
+  , initCmd : Cmd msg
+  }
+
+{-| Representation of an app using a service provider interface
+-}
+type alias ProgWithSpi spi model msg =
+  { update : spi -> msg -> model -> ( model, Cmd msg )
   , subscriptions : model -> Sub msg
   , view : model -> Html.Html msg
   , init : () -> model
@@ -48,7 +59,7 @@ perform msg =
 
 {-| Updates the state of the test, running a step at a time.
 -}
-update : Msg msg -> State app msg -> ( State app msg, Cmd (Msg msg) )
+update : Msg msg -> State spi app msg -> ( State spi app msg, Cmd (Msg msg) )
 update msg model =
   case msg of
     NoOp _ ->
@@ -56,7 +67,7 @@ update msg model =
 
     App appMsg ->
       let
-        (app, cmd) = model.update appMsg model.app
+        (app, cmd) = model.update model.spi appMsg model.app
       in
         { model | app = app } ! [Cmd.map App cmd]
 
@@ -84,6 +95,8 @@ update msg model =
                 else
                   updatedWithResults
 
+            updatedModel =
+              { model | spi = chain test.stubs model.spi }
           in
             case test.initCmd of
                 Just cmd ->
@@ -94,7 +107,7 @@ update msg model =
 
                         testWithoutCmd = { updatedTest | initCmd = Nothing }
                     in
-                        ({ model | tests = testWithoutCmd :: remainingTests }, Cmd.batch [ cmd, perform (Next Nothing) ] )
+                        ({ updatedModel | tests = testWithoutCmd :: remainingTests }, Cmd.batch [ cmd, perform (Next Nothing) ] )
                 Nothing ->
                     case test.steps of
                       -- Take the next step
@@ -114,16 +127,16 @@ update msg model =
                               |> Task.perform (Next << Just)
                         in
                           -- Execute
-                          ( { model | tests = testWithoutStep :: remainingTests }
+                          ( { updatedModel | tests = testWithoutStep :: remainingTests }
                           , stepTask
                           )
 
                       -- If there is no other steps go for the next test
                       [] ->
-                        ( { model
-                          | finishedTests = model.finishedTests ++ [updatedTest]
-                          , counter = model.counter + 1
-                          , app = model.appInit ()
+                        ( { updatedModel
+                          | finishedTests = updatedModel.finishedTests ++ [updatedTest]
+                          , counter = updatedModel.counter + 1
+                          , app = updatedModel.appInit ()
                           , tests = remainingTests
                           }
                         , perform (Next Nothing)
@@ -136,7 +149,7 @@ update msg model =
 
 {-| Renders the app and the report when finished.
 -}
-view : State model msg -> Html.Html (Msg msg)
+view : State spi model msg -> Html.Html (Msg msg)
 view model =
   let
     app : (String, Html.Html (Msg msg))
@@ -157,30 +170,30 @@ view model =
 
 {-| Runs the given tests without an app / component.
 -}
-run : Node msg -> Program Never (State String msg) (Msg msg)
-run tests =
+run : spi -> Node spi msg -> Program Never (State spi String msg) (Msg msg)
+run initialSpi tests =
   runWithProgram
-    { update = (\_ _ -> ( "", Cmd.none ))
+    { update = (\_ _ _ -> ( "", Cmd.none ))
     , subscriptions = (\_ -> Sub.none)
     , view = (\_ -> Html.text "")
     , init = (\_ -> "")
     , initCmd = Cmd.none
     }
-    tests
+    initialSpi tests
 
 
 {-| Runs the given tests with the given app / component.
 -}
-runWithProgram : Prog model msg -> Node msg -> Program Never (State model msg) (Msg msg)
-runWithProgram data tests =
+runWithProgram : ProgWithSpi spi model msg -> spi -> Node spi msg -> Program Never (State spi model msg) (Msg msg)
+runWithProgram data initialSpi tests =
   let
-    processedTests : Cmd (Msg msg) -> List (Test msg)
+    processedTests : Cmd (Msg msg) -> List (Test spi msg)
     processedTests initCmd =
       tests
       |> Spec.Internal.Types.flatten []
       |> List.indexedMap (\index item -> { item | id = index, initCmd = Just initCmd })
 
-    testToRun : Cmd (Msg msg) -> List (Test msg)
+    testToRun : Cmd (Msg msg) -> List (Test spi msg)
     testToRun initCmd =
       case Native.Spec.getTestId () of
         Just id -> List.filter (.id >> ((==) id)) (processedTests initCmd)
@@ -198,6 +211,7 @@ runWithProgram data tests =
           , app = data.init ()
           , view = data.view
           , counter = 0
+          , spi = initialSpi
           }
         , perform (Next Nothing)
         )
@@ -206,7 +220,7 @@ runWithProgram data tests =
 
 {-| Sends the report to the CLI when running tests in a terminal.
 -}
-report : List (Test msg) -> Cmd (Msg msg)
+report : List (Test spi msg) -> Cmd (Msg msg)
 report tests =
   let
     mockedRequests test =
@@ -267,3 +281,8 @@ report tests =
       Json.list (List.map encodeTest tests)
   in
     Task.perform NoOp (Native.Spec.report data)
+
+
+{-|-}
+chain: List (a -> a) -> a -> a
+chain = List.foldl (>>) identity

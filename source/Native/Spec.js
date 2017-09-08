@@ -344,6 +344,16 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
         })
     }
 
+    var invocationCounts = {};
+
+    var unsafeInvocationCount = function (id) {
+        return task(function (callback) {
+            invocationCounts[id] = invocationCounts[id] ? (invocationCounts[id] + 1) : 1;
+
+            callback(succeed(invocationCounts[id]));
+        });
+    }
+
     var setValue = function (value, selector) {
         return taskWithElement(selector, function (element) {
             element.value = value
@@ -575,6 +585,7 @@ var _takaczapka$elm_spec$Native_Spec = (function () {
         },
         click: click,
         inputViaPort: F2(inputViaPort),
-        raf: raf()
+        raf: raf(),
+        unsafeInvocationCount: unsafeInvocationCount,
     }
 }())

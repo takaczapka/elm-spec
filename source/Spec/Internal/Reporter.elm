@@ -49,7 +49,7 @@ renderOutcome outcome =
 
 {-| Renders a test.
 -}
-renderTest : Test msg -> Html.Html msg
+renderTest : Test spi msg -> Html.Html msg
 renderTest model =
   let
     requests =
@@ -90,7 +90,7 @@ renderTest model =
 
 {-| Renders the test results.
 -}
-render : List (Test msg) -> Html.Html msg
+render : List (Test spi msg) -> Html.Html msg
 render tests =
   let
     styles =

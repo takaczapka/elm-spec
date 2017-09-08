@@ -8,6 +8,7 @@ module Spec.Native exposing (..)
 @docs clearValueAndDispatch
 @docs bodyContains, checkboxChecked, elementDisabled, inlineStyleEquals
 @docs setValueAndDispatch
+@docs unsafeInvocationCount
 
 # Steps
 @docs clearValueAndDispatch
@@ -147,3 +148,8 @@ clearValueAndDispatch { selector, eventName } =
 setValueAndDispatch : ValueWithEventData -> Step
 setValueAndDispatch { value, selector, eventName } =
   Native.Spec.setValueAndDispatch value selector eventName
+
+{-|-}
+unsafeInvocationCount: comparable -> Task Never Int
+unsafeInvocationCount id =
+  Native.Spec.unsafeInvocationCount id
