@@ -3,7 +3,7 @@ module Spec.Internal.Reporter exposing (render)
 
 @docs render
 -}
-import Spec.Internal.Styles as Styles exposing (stylesheet)
+import Spec.Internal.Styles as Styles
 import Spec.Internal.Types exposing (..)
 import Spec.Internal.CoreTypes exposing (Outcome)
 import Spec.Internal.CoreTypes exposing (Outcome(..))
@@ -40,8 +40,7 @@ renderOutcome outcome =
           style [ ( "color", "red" ) ]
   in
     div
-      [ stylesheet.class Styles.Test
-      , property "innerHTML" html
+      [ property "innerHTML" html
       , styles
       ]
       []
@@ -68,7 +67,7 @@ renderTest model =
 
     renderRequest class request =
       div
-        [ stylesheet.class class ]
+        [ ]
         [ text (request.method ++ " - " ++ request.url ++ " - " ++ request.entity) ]
 
     requestResults =
@@ -78,14 +77,14 @@ renderTest model =
       then
         []
       else
-        [ div [ stylesheet.class Styles.SubTitle ] [ text "Requets:" ]]
+        [ div [ ] [ text "Requets:" ]]
         ++ (List.map (renderRequest Styles.CalledRequest) requests.called)
         ++ (List.map (renderRequest Styles.NotCalledRequest) notCalled)
         ++ (List.map (renderRequest Styles.UnhandledRequest) requests.unhandled)
 
   in
     div
-      [ stylesheet.class Styles.Row ] (title ++ results ++ requestResults)
+      [ ] (title ++ results ++ requestResults)
 
 
 {-| Renders the test results.
@@ -94,9 +93,9 @@ render : List (Test spi msg) -> Html.Html msg
 render tests =
   let
     styles =
-      [ Styles.embed ]
+      [ ]
 
     rows =
       List.map renderTest tests
   in
-    Html.div [ stylesheet.class Styles.Container ] (styles ++ rows)
+    Html.div [ ] (styles ++ rows)
